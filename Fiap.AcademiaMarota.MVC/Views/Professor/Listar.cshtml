@@ -1,0 +1,84 @@
+﻿@model List<Fiap.AcademiaMarota.MVC.Models.Professor>
+@{
+    ViewBag.Title = "Listar";
+}
+
+<h2>Lista de Alunos</h2>
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h4>Professores Cadastrados</h4>
+    </div>
+    <div class="panel-body">
+        <div>
+            @{
+                if (@Model.Count != 0)
+                {
+                    <div class="row">
+                        @MensagemHelper.Mensagem(@TempData["msg"] as String, "success")
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Ações</th>
+                                    <th>Nome</th>
+                                    <th>Modalidade</th>
+                                    <th>Data de admissão</th>
+                                    <th>Telefone</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in @Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.ActionLink("Editar",
+                                    "Editar",
+                                    new { id = @item.ProfessorId },
+                                    new { @class = "btn btn-info btn-sm" })
+                                        </td>
+                                        <td>@item.Nome</td>
+                                        <td>
+                                            @foreach (var mod in @item.Modalidades.ToList())
+                                            {
+                                                @mod.Titulo<span>, </span>
+                                            }
+                                        </td>
+                                        <td>@item.DataAdmissao</td>
+                                        <td>@item.EnderecoContato.Telefone</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                }
+                else
+                {
+                    @MensagemHelper.Mensagem("Não existem alunos matriculados", "info")
+                }
+            }
+        </div>
+    </div>
+</div>
+<script>
+
+    $().ready(function () {
+        inicializa();
+        $("td > a, td > button").css("visibility", "hidden");
+
+        $("tr").hover(
+        function () {
+            //Procura dentro do tr pelo a e button
+            $(this).find("a,button").css("visibility", "visible");
+        },
+        function () {
+            $(this).find("a,button").css("visibility", "hidden");
+        });
+
+        $(".remover").on("click", function () {
+            //Pega o valor do botão e adicona no campo oculto do modal
+            $("#id-remover").val($(this).val());
+            //Abre o modal
+            $("#confirmation").modal();
+        })
+    });
+</script>

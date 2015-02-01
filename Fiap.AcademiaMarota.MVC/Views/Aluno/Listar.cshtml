@@ -1,0 +1,129 @@
+﻿@model List<Fiap.AcademiaMarota.MVC.Models.Aluno>
+@{
+    ViewBag.Title = "Listar";
+}
+
+<h2>Lista de Alunos</h2>
+@Html.ActionLink("Inicio", "Index")
+|
+@Html.ActionLink("Cadastrar", "Cadastrar")
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h4>Professores Cadastrados</h4>
+    </div>
+    <div class="panel-body">
+        <div>
+            @{
+                if (@Model.Count != 0)
+                {
+                    <div class="row">
+                        @MensagemHelper.Mensagem(@TempData["msg"] as String, "success")
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Ações</th>
+                                    <th>Nome</th>
+                                    <th>Modalidade</th>
+                                    <th>Data de Nascimento</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in @Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.ActionLink("Editar",
+                                    "Editar",
+                                    new { id = @item.AlunoId },
+                                    new { @class = "btn btn-info btn-sm" })
+                                            <button value="@item.AlunoId"
+                                                    class="btn btn-danger btn-sm remover">
+                                                Remover
+                                            </button>
+                                        </td>
+                                        <td>@item.Nome</td>
+                                        <td>@item.Modalidade.Titulo</td>
+                                        <td>@item.DataNascimento</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                }
+                else
+                {
+                    @MensagemHelper.Mensagem("Não existem alunos matriculados", "info")
+                }
+            }
+        </div>
+    </div>
+</div>
+
+<!--Modal para confirmação da exclusão de um cliente-->
+<div class="modal fade" id="confirmation">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">Confirmação</h4>
+            </div>
+            <div class="modal-body">
+                <p>Deseja realmente remover o cliente?</p>
+            </div>
+            <div class="modal-footer">
+                <!--<form action="/Cliente/Apagar" method="post">-->
+                <input type="hidden" name="id" id="id-remover" />
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <input type="submit" id="btn-excluir" value="Excluir" class="btn btn-danger" />
+                <!--</form>-->
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<script>
+    $().ready(function () {
+        inicializa();
+    });
+
+    function inicializa() {
+
+        $("#btn-excluir").on("click", function () {
+            var alunoId = $("#id-remover").val();
+            $.ajax({
+                url: "/Aluno/Excluir",
+                type: "post",
+                data: { id: alunoId },
+                success: function (retorno) {
+                    $("button[value=" + alunoId + "]").closest("tr").fadeOut();
+                    //Fechar o modal
+                    $("#confirmation").modal("hide");
+                    //Cria uma div
+                    var div = $("<div class='alert alert-success'>").text(retorno.msg);
+                    //Adiciono a div criada na div panel-body  ,
+                    $("#busca").append(div);
+                }
+            })
+        });
+
+        //Esconde todos os a que estão dentro de um td
+        $("td > a, td > button").css("visibility", "hidden");
+
+        $("tr").hover(
+        function () {
+            //Procura dentro do tr pelo a e button
+            $(this).find("a,button").css("visibility", "visible");
+        },
+        function () {
+            $(this).find("a,button").css("visibility", "hidden");
+        });
+
+        $(".remover").on("click", function () {
+            //Pega o valor do botão e adicona no campo oculto do modal
+            $("#id-remover").val($(this).val());
+            //Abre o modal
+            $("#confirmation").modal();
+        })
+    }
+</script>

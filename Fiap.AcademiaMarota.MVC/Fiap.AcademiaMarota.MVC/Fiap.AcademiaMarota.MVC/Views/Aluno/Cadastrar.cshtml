@@ -1,0 +1,74 @@
+﻿@model Fiap.AcademiaMarota.MVC.Models.Aluno
+@{
+    ViewBag.Title = "Cadastrar";
+}
+
+<h2>Cadastro de Alunos</h2>
+@Html.ActionLink("Lista de Alunos", "Listar")
+@MensagemHelper.Mensagem(@TempData["msg"] as String, "success")
+@using (Html.BeginForm("Cadastrar", "Aluno"))
+{
+    <div class="row">
+
+        <div class="form-group col-md-6">
+            @Html.LabelFor(c => c.Nome)
+            @Html.TextBoxFor(c => c.Nome,
+                new
+                {
+                    @class = "form-control",
+                    placeholder = "Digite o Nome"
+                })
+        </div>
+        <div class="form-group col-md-6">
+            @Html.LabelFor(c => c.Cpf)
+            @Html.TextBoxFor(c => c.Cpf,
+                new
+                {
+                    @class = "form-control",
+                    placeholder = "Digite o CPF"
+                })
+        </div>
+        <div class="form-group col-md-6">
+            @Html.LabelFor(c => c.DataNascimento)
+            @Html.TextBoxFor(c => c.DataNascimento,
+                new
+                {
+                    @class = "form-control",
+                    placeholder = "Digite a Data de Nascimento"
+                })
+        </div>
+        <div class="form-group col-md-6">
+            @Html.LabelFor(c => c.Modalidade)
+            @Html.DropDownListFor(c => c.Modalidade, ViewBag.Modalidades as SelectList, "Selecione..",
+            new
+            {
+                @class = "form-control"
+            })
+        </div>
+        <div class="form-group col-md-12">
+            @Html.LabelFor(c => c.Endereco)
+            @Html.TextBoxFor(c => c.Endereco,
+                new
+                {
+                    @class = "form-control",
+                    placeholder = "Digite o Endereço"
+                })
+        </div>
+        <div class="form-group col-md-12">
+            @Html.LabelFor(c => c.Obs)
+            @Html.TextAreaFor(c => c.Obs,
+                new
+                {
+                    @class = "form-control",
+                    placeholder = "Observação.."
+                })
+        </div>
+        <div class="form-group col-md-12">
+            @Html.CheckBoxFor(c => c.Especial)
+            @Html.LabelFor(c => c.Especial)
+        </div>
+        <div class="form-group col-md-12">
+            @SubmitHelper.Submit("Enviar", "btn-success");
+        </div>
+    </div>
+}

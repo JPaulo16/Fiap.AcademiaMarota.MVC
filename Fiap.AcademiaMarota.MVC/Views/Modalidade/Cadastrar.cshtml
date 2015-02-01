@@ -1,0 +1,52 @@
+﻿@model Fiap.AcademiaMarota.MVC.Models.Modalidade
+@{
+    ViewBag.Title = "Modalidade";
+}
+
+<h2>Cadastro de Modalidades</h2>
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3>Informações da Modalidade</h3>
+    </div>
+    <div class="panel-body center-block">
+        @using (@Html.BeginForm())
+        {
+            @MensagemHelper.Mensagem(TempData["msg"] as string, "success")
+            <div class="row">
+                <div class="col-md-6 form-group">
+                    @Html.LabelFor(p => p.Titulo)
+                    @Html.TextBoxFor(p => p.Titulo,
+                    new { @class = "form-control", placeholder = "Digite o nome do plano" })
+                </div>
+                <div class="col-md-6 form-group">
+                    @Html.LabelFor(p => p.Valor)
+                    @Html.TextBoxFor(p => p.Valor,
+                    new { @class = "form-control", placeholder = "R$ 000.00" })
+                </div>
+                <div class="form-group col-md-12 center-block" align="center">
+                    @SubmitHelper.Submit("Salvar")
+                </div>
+            </div>
+        }
+        <hr />
+        <h3>Planos Cadastrados</h3>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Titulo</th>
+                    <th>Valor</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in ViewBag.Modalidades)
+                {
+                    <tr>
+                        <td>@item.Titulo</td>
+                        <td>@item.Valor</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+

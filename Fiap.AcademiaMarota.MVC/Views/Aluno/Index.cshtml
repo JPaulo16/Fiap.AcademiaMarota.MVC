@@ -1,0 +1,17 @@
+﻿@model List<Fiap.AcademiaMarota.MVC.Models.Aluno>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Gerenciamento de Alunos da Academia!</h2>
+
+@Html.ActionLink("Cadastrar", "Cadastrar")
+|
+@Html.ActionLink("Listar", "Listar")
+<div class="alert alert-info">
+    Aluno(s) Matriculado(s):
+    @{
+        @Model.Count.ToString();
+    }
+</div>
